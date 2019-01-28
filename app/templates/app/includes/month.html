@@ -14,13 +14,19 @@
     {% for week in month_days %}
         <tr>
             {% for day in week %}
-                {% if now == day %}
+                {% if now == day  %}
                     <td class="table-success">
                 {% else %}
                     <td>
                 {% endif %}
 
-                <a href="{% url 'app:mycalendar' day.year day.month day.day %}">{{ day.day }}</a>
+                {% for holiday in holidays %}
+                    {% if holiday == day  %}
+                        <a href="{% url 'app:mycalendar' day.year day.month day.day %}" style="color: red;">{{ day.day }}</a>
+                    {% else %}
+                        <a href="{% url 'app:mycalendar' day.year day.month day.day %}" color>{{ day.day }}</a>
+                    {% endif %}
+                {% endfor %}
                 </td>
             {% endfor %}
         </tr>

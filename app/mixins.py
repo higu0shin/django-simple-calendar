@@ -46,7 +46,33 @@ class MonthCalendarMixin(BaseCalendarMixin):
 
     def get_month_days(self, date):
         """その月の全ての日を返す"""
+        if date.month == 1:
+            holidays = [1, 2, 3, 14]
+        if date.month == 2:
+            holidays = [11, 14]
+        if date.month == 3:
+            holidays = [3, 21]
+        if date.month == 4:
+            holidays = [29,30]
+        if date.month == 5:
+            holidays = [1, 2, 3, 4, 5, 6]
+        if date.month == 6:
+            holidays = [22]
+        if date.month == 7:
+            holidays = [7, 15]
+        if date.month == 8:
+            holidays = [16, 9, 11, 12]
+        if date.month == 9:
+            holidays = [16,23]
+        if date.month == 10:
+            holidays = [14, 22]
+        if date.month == 11:
+            holidays = [3,4,15, 23]
+        if date.month == 12:
+            holidays = [22, 25, 31]
+
         return self._calendar.monthdatescalendar(date.year, date.month)
+
 
     def get_current_month(self):
         """現在の月を返す"""
@@ -159,6 +185,12 @@ class MonthWithScheduleMixin(MonthCalendarMixin):
         # 7個ずつ取り出して分割しています。
         size = len(day_schedules)
         return [{key: day_schedules[key] for key in itertools.islice(day_schedules, i, i+7)} for i in range(0, size, 7)]
+
+    def delete_schedule (self, start, end, days):
+        day_schedules = {day: [] for week in days for day in week}
+        for schedule in queryset:
+            schedule_date = getattr(schedule, self.date_field)
+            day_schedules[schedule_date].append(schedule)
 
     def get_month_calendar(self):
         calendar_context = super().get_month_calendar()
